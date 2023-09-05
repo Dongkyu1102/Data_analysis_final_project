@@ -1,0 +1,80 @@
+import pandas as pd
+import numpy as np
+import torch
+from tqdm.auto import tqdm
+import random
+import os
+import re
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+DATA_PATH = "/content/drive/MyDrive/
+
+df = pd.read_csv(f"{DATA_PATH}결측치_이모티콘_불필요정보_제거_통합데이터.csv")
+df
+
+df['분야']
+df['분야'].unique()
+
+df_1 = df[df['분야'] == '요리/ 홈쿡/ 집밥']
+df_1.head()
+
+df_2 = df[df['분야'] == '맛집/ 먹방']
+df_2.head()
+
+df_3 = df[df['분야'] == '요리/ 먹방/ 맛집/ ']
+df_3.head()
+
+df_all = pd.concat([df_1, df_2, df_3])
+df_all.head()
+
+df_all['분야'].unique()
+
+df_all['분야'] = '요리+맛집'
+df_all
+
+
+df_all = df_all.reset_index(drop=False)
+df_all.head()
+df_all.loc[:]
+
+df_all['comments']
+
+######################################################
+# 게시글 별 댓글 모음
+df_all_total_A = []  # 빈 리스트 생성
+
+# df_all['comments']에 있는 각 문자열을 파이썬 리스트로 변환하여 df_all_total에 추가
+for x in df_all['comments']:
+    ast.literal_eval(x)
+    df_all_total_A.append(ast.literal_eval(x))
+
+df_all_total_A
+len(df_all_total_A) # 게시글 수와 같음
+
+######################################################
+# 게시글 별 모든 댓글 하나의 리스트로 (df_all_total_B )
+df_all_total_B = []  # 빈 리스트 생성
+
+for x in df_all['comments']:
+    ast.literal_eval(x)
+    df_all_total_B.extend(ast.literal_eval(x))
+
+df_all_total_B
+len(df_all_total_B) # 모든 게시글들의 댓글 갯수의 총 합
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
