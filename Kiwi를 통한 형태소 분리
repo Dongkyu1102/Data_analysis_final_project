@@ -1,0 +1,41 @@
+pip install kiwipiepy
+
+from kiwipiepy import Kiwi
+from kiwipiepy.utils import Stopwords
+
+kiwi = Kiwi()
+stopwords = Stopwords()
+
+# 불용어에 추가하기
+stopwords.add([('쌀', 'NNG'), ('박', 'NNG'), ('술', 'NNG'), ('입', 'NNG'), ('흑', 'NNG'), ('곳', 'NNG'), ('냉', 'NNG'), ('용', 'NNG'), ('규', 'NNG'), ('손', 'NNG'), ('상', 'NNG'), ('양', 'NNG'), ('칼', 'NNG'), ('각', 'NNG'), ('밤', 'NNG'), ('날', 'NNG'), ('전', 'NNG'), ('잔', 'NNG'),  ('비', 'NNG')])
+stopwords.stopwords
+
+# 일반명사만
+
+train_list_NNG = []
+
+comments_text = kiwi.tokenize(df_all_total_B, stopwords=stopwords)
+
+for tokens in tqdm(comments_text, total=len(df_all_total_B)):
+    tokens = [t.form for t in tokens if t.tag in ("NNG")]    # NNG:일반 명사 / NNP: 고유 명사 / NNB: 의존 명사 / NR: 수사 / NP: 대명사 / VV: 동사 / VA: 형용사 / XR: 어근
+    train_list_NNG.append(tokens)
+
+train_list_NNG
+
+# 일반명사만
+
+train_fine_NNG_lst= []
+for i in range(len(train_list_NNG)):
+    train_fine_NNG_lst += train_list_NNG[i]   #   += 연산자는 append() 메서드와 동일한 기능
+
+train_fine_NNG_lst
+
+# 단어 빈도수 확인
+from collections import Counter
+vocab_counter = Counter(train_fine_NNG_lst)
+vocab_counter.most_common(100)
+
+# kiwi에 미등록된 명사 추출
+none_words = kiwi.extract_words(df_all['comments'], min_cnt=50, max_word_len=10, min_score=0.10)
+none_words
+
